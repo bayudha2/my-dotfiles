@@ -5,12 +5,12 @@ local keymap = vim.keymap
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search hightlights" })
 
 -- vertical movement
-keymap.set("n", "J", "5jzz", { desc = "Go down for 5 row"})
+keymap.set("n", "J", "5j", { desc = "Go down for 5 row"})
 keymap.set("v", "J", "5j", { desc = "Go down for 5 row on visual mode"})
-keymap.set("n", "K", "5kzz", { desc = "Go up for 5 row", remap = true })
+keymap.set("n", "K", "5k", { desc = "Go up for 5 row", remap = true })
 keymap.set("v", "K", "5k", { desc = "Go up for 5 row on visual mode", remap = true })
-keymap.set("n", "{", "{zz", { desc = "Go up to blank row and center view"})
-keymap.set("n", "}", "}zz", { desc = "Go down to blank row and center view"})
+keymap.set("n", "{", "{", { desc = "Go up to blank row and center view"})
+keymap.set("n", "}", "}", { desc = "Go down to blank row and center view"})
 
 -- increment/decrement numbers
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
@@ -27,3 +27,9 @@ keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" 
 keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) -- Go to next tab
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) -- Go to previous tab
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) -- Open current buffer in new tab
+
+keymap.set("n", "<leader>m1", "<cmd>tabn 1<CR>", { desc = "Jump to tab 1" }) -- Jump to tab 1  on current nvim
+keymap.set("n", "<leader>m2", "<cmd>tabn 2<CR>", { desc = "Jump to tab 2" }) -- Jump to tab 2  on current nvim
+keymap.set("n", "<leader>m3", "<cmd>tabn 3<CR>", { desc = "Jump to tab 3" }) -- Jump to tab 3  on current nvim
+keymap.set("n", "<leader>m4", "<cmd>tabn 4<CR>", { desc = "Jump to tab 4" }) -- Jump to tab 4  on current nvim
+keymap.set("n", "<leader>m5", "<cmd>tabn 5<CR>", { desc = "Jump to tab 5" }) -- Jump to tab 5  on current nvim

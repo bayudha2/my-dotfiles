@@ -131,6 +131,12 @@ return {
 								unusedparams = true,
 							},
 						},
+              completeUnimported = true,
+              usePlaceholders = true,
+              analyses = {
+                unusedparams = true,
+              }
+            },
 					},
 				})
 			end,

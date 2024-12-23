@@ -48,6 +48,7 @@ return {
 				"somesass_ls",
 				"yamlls",
 				"lemminx",
+				-- "groovyls",
 			},
 		})
 

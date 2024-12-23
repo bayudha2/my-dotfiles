@@ -114,6 +114,15 @@ return {
 					},
 				})
 			end,
+			-- ["groovyls"] = function()
+			-- 	lspconfig["groovyls"].setup({
+			-- 		capabilities = capabilities,
+			-- 		fileTypes = {
+			-- 			"jenkinsfile",
+			-- 			"groovy",
+			-- 		},
+			-- 	})
+			-- end,
 			["lua_ls"] = function()
 				-- configure lua server (with special settings)
 				lspconfig["lua_ls"].setup({

@@ -16,8 +16,14 @@ local H = {
 }
 
 local TestEnum = {
-	javascript = JS.getJSTestCmd,
-	go = GO.getGoTestCmd,
+	javascript = {
+		getTestCmd = JS.getJSTestCmd,
+		runTest = "npm run test\\n",
+	},
+	go = {
+		getTestCmd = GO.getGoTestCmd,
+		runTest = "go test -timeout 30s -v ./... -cover\\n",
+	},
 }
 
 --- @param infoPm {javascript: string|nil, go : string|nil}
@@ -67,7 +73,7 @@ function H:getNearbyTestCmd()
 	end
 
 	local pm = self.pm[cft]
-	local res, err = TestEnum[cft]({ fullpath = fullPath, file = currentFile }, pm)
+	local res, err = TestEnum[cft].getTestCmd({ fullpath = fullPath, file = currentFile }, pm)
 
 	return res, err
 end
@@ -97,9 +103,17 @@ function H:runNearbyTestInVsplit()
 	vim.cmd(cmdEnter)
 end
 
-function H.runAllAvailableTestInVsplit()
+function H:runAllAvailableTestInVsplit()
+	local cft = self:checkFileType()
+
+	if cft == nil then
+		return "No file type match", true
+	end
+
+	local cmdTestAllText = TestEnum[cft].runTest
+
 	vim.cmd("vsplit | terminal")
-	local cmdTestAll = ':call jobsend(b:terminal_job_id, "npm run test\\n")'
+	local cmdTestAll = ":call jobsend(b:terminal_job_id, " .. '"' .. cmdTestAllText .. '"' .. ")"
 	vim.cmd(cmdTestAll)
 end
 

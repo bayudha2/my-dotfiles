@@ -31,22 +31,19 @@ local function getDescAndTest()
 end
 
 return {
-	--- @param cft string|nil
-	--- @param fullPath string
-	--- @param pm {
-	---     go: string,
-	---     javascript: string,
+	--- @param path {
+	---   fullpath: string,
+	---   file: string,
 	--- }
+	--- @param pm string
 	--- @return string, boolean
-	getJSTestCmd = function(fullPath, cft, pm)
+	getJSTestCmd = function(path, pm)
 		local testBaseOnTestingFramework = getDescAndTest()
 		local testAnnotation = ""
 		local basePath = vim.fn.getcwd():gsub("([^%w])", "%%%1") .. "%/"
-		local resultPath = fullPath:gsub(basePath, "")
+		local resultPath = path.fullpath:gsub(basePath, "")
 
-		if cft == nil then
-			return "No file type match", true
-		end
+		-- TODO: check if file contain "test" text
 
 		if
 			#testBaseOnTestingFramework == 0
@@ -71,8 +68,7 @@ return {
 			testAnnotation = testAnnotation .. " " .. frmtIt
 		end
 
-		local cpm = pm[cft]
-		local testCmd = cpm .. " test -- " .. resultPath .. " -t=" .. '"' .. testAnnotation .. '"'
+		local testCmd = pm .. " test -- " .. resultPath .. " -t=" .. '"' .. testAnnotation .. '"'
 
 		return testCmd, false
 	end,

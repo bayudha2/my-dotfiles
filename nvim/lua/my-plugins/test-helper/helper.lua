@@ -1,4 +1,5 @@
 local JS = require("my-plugins.test-helper.js.test")
+local GO = require("my-plugins.test-helper.go.test")
 
 local H = {
 	pm = { -- package manager
@@ -12,6 +13,11 @@ local H = {
 		typescriptreact = "javascript",
 		go = "go",
 	},
+}
+
+local TestEnum = {
+	javascript = JS.getJSTestCmd,
+	go = GO.getGoTestCmd,
 }
 
 --- @param infoPm {javascript: string|nil, go : string|nil}
@@ -36,6 +42,10 @@ H.getFullPathFile = function()
 	return vim.fn.expand("%:p")
 end
 
+H.getCurrentFile = function()
+	return vim.fn.expand("%:t")
+end
+
 H.checkFileType = function(self)
 	local cft = self.getFileType()
 	local baseFT = self.ft[cft]
@@ -47,30 +57,40 @@ H.checkFileType = function(self)
 	return nil
 end
 
--- 	-- TODO: create conditional base on file type
 function H:getNearbyTestCmd()
 	local fullPath = self.getFullPathFile()
+	local currentFile = self.getCurrentFile()
 	local cft = self:checkFileType()
 
-	local resString, err = JS.getJSTestCmd(fullPath, cft, self.pm)
-	if err then
-		print(resString)
-		return
+	if cft == nil then
+		return "No file type match", true
 	end
 
-	return resString
+	local pm = self.pm[cft]
+	local res, err = TestEnum[cft]({ fullpath = fullPath, file = currentFile }, pm)
+
+	return res, err
 end
 
 function H:copyNearbyTestCmd()
-	local testCmd = self:getNearbyTestCmd()
-	vim.fn.setreg("+", testCmd)
+	local res, err = self:getNearbyTestCmd()
+	if err then
+		print(res)
+		return
+	end
+
+	vim.fn.setreg("+", res)
 end
 
 function H:runNearbyTestInVsplit()
-	local testCmd = self:getNearbyTestCmd()
+	local res, err = self:getNearbyTestCmd()
+	if err then
+		print(res)
+		return
+	end
 
 	vim.cmd("vsplit | terminal")
-	local cmdTestSpesific = ":call jobsend(b:terminal_job_id, " .. "'" .. testCmd .. "')"
+	local cmdTestSpesific = ":call jobsend(b:terminal_job_id, " .. "'" .. res .. "')"
 	local cmdEnter = ':call jobsend(b:terminal_job_id, "\\n")'
 
 	vim.cmd(cmdTestSpesific)

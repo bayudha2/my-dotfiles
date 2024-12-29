@@ -190,14 +190,12 @@ function M.start_presentation(message, selfCloseTime)
 	vim.keymap.set("n", "<leader>gq", function()
 		vim.api.nvim_win_close(float.win, true)
 		pcall(vim.keymap.del, "n", "<leader>gq")
-		-- vim.keymap.del("n", "<leader>gq", {})
 	end, { desc = "close window shalah reminder" })
 
 	vim.defer_fn(function()
 		if vim.api.nvim_win_is_valid(float.win) then
 			vim.api.nvim_win_close(float.win, true)
 			pcall(vim.keymap.del, "n", "<leader>gq")
-			-- vim.keymap.del("n", "<leader>gq", {})
 		end
 	end, selfCloseTime * 1000)
 end

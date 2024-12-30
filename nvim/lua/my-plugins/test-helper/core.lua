@@ -11,6 +11,11 @@ function M.run_nearby_test()
 	H:runNearbyTestInVsplit()
 end
 
+-- Function to run all available test in a file
+function M.run_file_test()
+	H:runFileTestInVsplit()
+end
+
 -- Function to run all available test
 function M.run_all_test()
 	H:runAllAvailableTestInVsplit()

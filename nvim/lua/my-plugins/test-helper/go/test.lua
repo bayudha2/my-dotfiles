@@ -25,8 +25,7 @@ return {
 	--- }
 	--- @param pm string
 	--- @return string, boolean
-	getGoTestCmd = function(path, pm)
-
+	getGoNearbyTestCmd = function(path, pm)
 		local res = getTestName()
 		local basePath = vim.fn.getcwd():gsub("([^%w])", "%%%1")
 		local subFullwithBasePath = path.fullpath:gsub(basePath, "")
@@ -34,12 +33,24 @@ return {
 		local resPath = "." .. subFullwithBasePath:gsub(fmtdFile, "")
 
 		if res == nil then
-			return "No test function found at the moment", true
+			return "[test-helper] No test function found at the moment", true
 		end
 
 		local testCmd = pm .. " test -timeout 15s -v -run " .. res .. " " .. resPath .. " -cover"
 		-- .. " -coverprofile=cover.out"
 
+		return testCmd, false
+	end,
+	--- @param path {
+	---   fullpath: string,
+	--- }
+	--- @param pm string
+	--- @return string, boolean
+	getGoFileTestCmd = function(path, pm)
+		local basePath = vim.fn.getcwd():gsub("([^%w])", "%%%1")
+		local subFullwithBasePath = "." .. path.fullpath:gsub(basePath, ""):match("(.*/)")
+
+		local testCmd = pm .. " test -timeout 15s -v " .. subFullwithBasePath .. " -cover"
 		return testCmd, false
 	end,
 }

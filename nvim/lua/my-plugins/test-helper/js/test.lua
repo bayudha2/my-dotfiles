@@ -37,20 +37,18 @@ return {
 	--- }
 	--- @param pm string
 	--- @return string, boolean
-	getJSTestCmd = function(path, pm)
+	getJSNearbyTestCmd = function(path, pm)
 		local testBaseOnTestingFramework = getDescAndTest()
 		local testAnnotation = ""
 		local basePath = vim.fn.getcwd():gsub("([^%w])", "%%%1") .. "%/"
 		local resultPath = path.fullpath:gsub(basePath, "")
-
-		-- TODO: check if file contain "test" text
 
 		if
 			#testBaseOnTestingFramework == 0
 			and testBaseOnTestingFramework["test"] == nil
 			and testBaseOnTestingFramework["it"] == nil
 		then
-			return "No test function found at the moment", true
+			return "[test-helper] No test function found at the moment", true
 		end
 
 		if testBaseOnTestingFramework["describe"] then
@@ -70,6 +68,28 @@ return {
 
 		local testCmd = pm .. " test -- " .. resultPath .. " -t=" .. '"' .. testAnnotation .. '"'
 
+		return testCmd, false
+	end,
+	--- @param path {
+	---   fullpath: string,
+	--- }
+	--- @param pm string
+	--- @return string, boolean
+	getJSFileTestCmd = function(path, pm)
+		local basePath = vim.fn.getcwd():gsub("([^%w])", "%%%1") .. "%/"
+		local resultPath = path.fullpath:gsub(basePath, "")
+		local filename = resultPath:match(".+/(.+)$")
+		local tstrres = {}
+
+		for match in filename:gmatch("([^.]+)") do
+			table.insert(tstrres, match)
+		end
+
+		if tstrres[#tstrres - 1] ~= "test" then
+			return "[test-helper] Is not a test file", true
+		end
+
+		local testCmd = pm .. " test -- " .. resultPath
 		return testCmd, false
 	end,
 }

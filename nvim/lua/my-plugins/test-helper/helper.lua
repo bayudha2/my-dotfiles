@@ -17,11 +17,13 @@ local H = {
 
 local TestEnum = {
 	javascript = {
-		getTestCmd = JS.getJSTestCmd,
+		getNearbyTestCmd = JS.getJSNearbyTestCmd,
+		getFileTestCmd = JS.getJSFileTestCmd,
 		runTest = "npm run test\\n",
 	},
 	go = {
-		getTestCmd = GO.getGoTestCmd,
+		getNearbyTestCmd = GO.getGoNearbyTestCmd,
+		getFileTestCmd = GO.getGoFileTestCmd,
 		runTest = "go test -timeout 30s -v ./... -cover\\n",
 	},
 }
@@ -69,11 +71,27 @@ function H:getNearbyTestCmd()
 	local cft = self:checkFileType()
 
 	if cft == nil then
-		return "No file type match", true
+		return "[test-helper] No file type match", true
 	end
 
 	local pm = self.pm[cft]
-	local res, err = TestEnum[cft].getTestCmd({ fullpath = fullPath, file = currentFile }, pm)
+	local res, err = TestEnum[cft].getNearbyTestCmd({ fullpath = fullPath, file = currentFile }, pm)
+
+	return res, err
+end
+
+--- @return string, boolean
+function H:getFileTestCmd()
+	local fullPath = self.getFullPathFile()
+	local currentFile = self.getCurrentFile()
+	local cft = self:checkFileType()
+
+	if cft == nil then
+		return "[test-helper] No file type match", true
+	end
+
+	local pm = self.pm[cft]
+	local res, err = TestEnum[cft].getFileTestCmd({ fullpath = fullPath }, pm)
 
 	return res, err
 end
@@ -103,11 +121,26 @@ function H:runNearbyTestInVsplit()
 	vim.cmd(cmdEnter)
 end
 
+function H:runFileTestInVsplit()
+	local res, err = self:getFileTestCmd()
+	if err then
+		print(res)
+		return
+	end
+
+	vim.cmd("vsplit | terminal")
+	local cmdTestSpesific = ":call jobsend(b:terminal_job_id, " .. "'" .. res .. "')"
+	local cmdEnter = ':call jobsend(b:terminal_job_id, "\\n")'
+
+	vim.cmd(cmdTestSpesific)
+	vim.cmd(cmdEnter)
+end
+
 function H:runAllAvailableTestInVsplit()
 	local cft = self:checkFileType()
 
 	if cft == nil then
-		return "No file type match", true
+		return "[test-helper] No file type match", true
 	end
 
 	local cmdTestAllText = TestEnum[cft].runTest

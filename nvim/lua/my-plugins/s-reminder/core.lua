@@ -92,8 +92,8 @@ function M:setupSchedule()
 			-- INFO: doesn't need to auto update loc, let user update the loc them self :)))
 
 			if i == 1 and self.getCurrentDate() ~= line then -- if current schedule file date is not updated,
-				local isFail, tPrayer = self:getScheduleToday()
-				if isFail then
+				local tPrayer = self:getScheduleToday()
+				if tPrayer == nil then
 					print("[s-reminder] failed fetching schedule")
 					return
 				end
@@ -126,8 +126,8 @@ function M:setupSchedule()
 	else -- if schedule file doesn't exist
 		file = io.open(pathSchedule, "w+")
 		if file then
-			local isFail, tPrayer = self:getScheduleToday()
-			if isFail then
+			local tPrayer = self:getScheduleToday()
+			if tPrayer == nil then
 				print("[s-reminder] failed fetching schedule")
 				return
 			end
@@ -144,7 +144,7 @@ function M:setupSchedule()
 	end
 end
 
---- @return boolean, table
+--- @return table|nil
 function M:getScheduleToday()
 	local cd = self.getCurrentDate()
 
@@ -164,15 +164,15 @@ function M:getScheduleToday()
 
 		local statusCode = resp:sub(-3)
 		if statusCode ~= "200" then
-			return true, {}
+			return nil
 		end
 
 		local tPrayer = self.getPrayTimeFromJsonString(resp)
 
-		return false, tPrayer
+		return tPrayer
 	end
 
-	return true, {}
+	return nil
 end
 
 --- @return string

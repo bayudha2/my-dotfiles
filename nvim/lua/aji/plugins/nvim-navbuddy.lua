@@ -21,6 +21,7 @@ return {
 		vim.api.nvim_set_hl(0, "NavicIconsConstant", { default = true, bg = "#358bc1", fg = "#358bc1" })
 		vim.api.nvim_set_hl(0, "NavicIconsString", { default = true, bg = "#d18441", fg = "#d18441" })
 		vim.api.nvim_set_hl(0, "NavicIconsNumber", { default = true, bg = "#a8c59f", fg = "#a8c59f" })
+    
 		-- vim.api.nvim_set_hl(0, "NavicIconsFile",          {default = true, bg = "#000000", fg = "#ffffff"})
 		-- vim.api.nvim_set_hl(0, "NavicIconsModule",        {default = true, bg = "#000000", fg = "#ffffff"})
 		-- vim.api.nvim_set_hl(0, "NavicIconsPackage",       {default = true, bg = "#000000", fg = "#ffffff"})

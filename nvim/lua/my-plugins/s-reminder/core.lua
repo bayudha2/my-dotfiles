@@ -32,7 +32,7 @@ function M:createPrayReminder(prayName, prayTime)
 
 	-- reminder -5 minutes of pray time
 	vim.defer_fn(function()
-		self.start_presentation(prayName .. " on 5 mins", 299)
+		self.start_presentation("  " .. prayName .. " on 5 mins", 299)
 	end, (remainingTimeOnMinute - 5) * 60 * 1000)
 end
 
@@ -98,6 +98,7 @@ function M:setupSchedule()
 					return
 				end
 
+				-- BUG: refactor how to update schdule file update, sometimes its not right
 				file:seek("set", 0)
 				file:write(self.getCurrentDate() .. "\n")
 				for key, val in pairs(tPrayer) do

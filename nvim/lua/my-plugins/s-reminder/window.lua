@@ -1,7 +1,8 @@
 local M = {}
 
-M.create_floating_window = function()
-	local width = 16
+--- @param windowWith integer width of floating window
+M.create_floating_window = function(windowWith)
+	local width = windowWith or 16
 	local height = 1
 
 	-- position

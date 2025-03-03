@@ -23,7 +23,7 @@ function M:createPrayReminder(prayName, prayTime)
 
 	-- reminder exact pray time
 	vim.defer_fn(function()
-		self.start_presentation("      " .. prayName, 300)
+		self.start_presentation("   " .. prayName .. " ", 300, prayName:len() + 5)
 	end, remainingTimeOnMinute * 60 * 1000)
 
 	if remainingTimeOnMinute - 5 < 0 then
@@ -32,7 +32,7 @@ function M:createPrayReminder(prayName, prayTime)
 
 	-- reminder -5 minutes of pray time
 	vim.defer_fn(function()
-		self.start_presentation("  " .. prayName .. " on 5 mins", 299)
+		self.start_presentation(" " .. prayName .. " on 5 mins ", 300, prayName:len() + 12)
 	end, (remainingTimeOnMinute - 5) * 60 * 1000)
 end
 
@@ -184,8 +184,9 @@ end
 
 --- @param message string prayer namer e.g tzuhur, asr, magrhib
 --- @param selfCloseTime integer self close timer on seconds
-function M.start_presentation(message, selfCloseTime)
-	local float = W.create_floating_window()
+--- @param width integer width of floating window
+function M.start_presentation(message, selfCloseTime, width)
+	local float = W.create_floating_window(width)
 	vim.api.nvim_buf_set_lines(float.buf, 0, -1, false, { message })
 
 	vim.keymap.set("n", "<leader>gq", function()

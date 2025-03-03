@@ -21,7 +21,6 @@ function M:createPrayReminder(prayName, prayTime)
 		return
 	end
 
-	-- TODO: create custom window size params
 	-- reminder exact pray time
 	vim.defer_fn(function()
 		self.start_presentation("   " .. prayName .. " ", 300, prayName:len() + 5)

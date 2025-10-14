@@ -16,7 +16,7 @@ return {
 	},
 	config = function()
 		-- import lspconfig plugin
-		local lspconfig = require("lspconfig")
+		-- local lspconfig = require("lspconfig")
 
 		-- import mason_lspconfig plugin
 		local mason_lspconfig = require("mason-lspconfig")
@@ -93,72 +93,114 @@ return {
 				-- if server_name == "tsserver" then
 				-- 	server_name = "ts_ls"
 				-- end
-				lspconfig[server_name].setup({
-					capabilities = capabilities,
+
+				vim.lsp.config(server_name, {
+					settings = {
+						[server_name] = {},
+					},
 				})
+
+				vim.lsp.enable(server_name)
+
+				-- lspconfig[server_name].setup({
+				-- 	capabilities = capabilities,
+				-- 	settings = {
+				-- 		[server_name] = {},
+				-- 	},
+				-- })
 			end,
 			["emmet_ls"] = function()
 				-- configure emmet language server
-				lspconfig["emmet_ls"].setup({
-					capabilities = capabilities,
-					filetypes = {
-						"html",
-						"typescriptreact",
-						"javascriptreact",
-						"css",
-						"sass",
-						"scss",
-						"less",
-						"svelte",
-						"vue",
-					},
-				})
-			end,
-			-- ["groovyls"] = function()
-			-- 	lspconfig["groovyls"].setup({
-			-- 		capabilities = capabilities,
-			-- 		fileTypes = {
-			-- 			"jenkinsfile",
-			-- 			"groovy",
-			-- 		},
-			-- 	})
-			-- end,
-			["lua_ls"] = function()
-				-- configure lua server (with special settings)
-				lspconfig["lua_ls"].setup({
-					capabilities = capabilities,
+				-- lspconfig["emmet_ls"].setup({
+				-- 	capabilities = capabilities,
+				-- 	filetypes = {
+				-- 		"html",
+				-- 		"typescriptreact",
+				-- 		"javascriptreact",
+				-- 		"css",
+				-- 		"sass",
+				-- 		"scss",
+				-- 		"less",
+				-- 		"svelte",
+				-- 		"vue",
+				-- 	},
+				-- })
+
+				vim.lsp.config("emmet_ls", {
 					settings = {
-						Lua = {
-							-- make the language server recognize "vim" global
-							diagnostics = {
-								globals = { "vim" },
-							},
-							completion = {
-								callSnippet = "Replace",
+						["emmet_ls"] = {
+							capabilities = capabilities,
+							filetypes = {
+								"html",
+								"typescriptreact",
+								"javascriptreact",
+								"css",
+								"sass",
+								"scss",
+								"less",
+								"svelte",
+								"vue",
 							},
 						},
 					},
 				})
+
+				vim.lsp.enable("emmet_ls")
+			end,
+			["lua_ls"] = function()
+				vim.lsp.config("lua_ls", {
+					settings = {
+						["lua_ls"] = {
+							capabilities = capabilities,
+							fileTypes = {
+								"jenkinsfile",
+								"groovy",
+							},
+						},
+					},
+				})
+				vim.lsp.enable("lua_ls")
+
+				-- configure lua server (with special settings)
+				-- lspconfig["lua_ls"].setup({
+				-- 	capabilities = capabilities,
+				-- 	settings = {
+				-- 		Lua = {
+				-- 			-- make the language server recognize "vim" global
+				-- 			diagnostics = {
+				-- 				globals = { "vim" },
+				-- 			},
+				-- 			completion = {
+				-- 				callSnippet = "Replace",
+				-- 			},
+				-- 		},
+				-- 	},
+				-- })
 			end,
 			["gopls"] = function()
-				-- configure golang server
-				lspconfig["gopls"].setup({
-					capabilities = capabilities,
+				vim.lsp.config("gopls", {
 					settings = {
-						gopls = {
-							completeUnimported = true,
-							usePlaceholders = true,
-							analyses = {
-								unusedparams = true,
+						["gopls"] = {
+							capabilities = capabilities,
+							settings = {
+								gopls = {
+									completeUnimported = true,
+									usePlaceholders = true,
+									analyses = {
+										unusedparams = true,
+									},
+								},
+								completeUnimported = true,
+								usePlaceholders = true,
+								analyses = {
+									unusedparams = true,
+								},
 							},
-						},
-						completeUnimported = true,
-						usePlaceholders = true,
-						analyses = {
-							unusedparams = true,
 						},
 					},
 				})
+
+				vim.lsp.enable("golps")
 			end,
 		})
 	end,

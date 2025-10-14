@@ -33,7 +33,7 @@ return {
 				"css_variables",
 				"tailwindcss",
 				"svelte",
-				"volar",
+        "vuels",
 				"lua_ls",
 				"graphql",
 				"emmet_ls",
@@ -56,9 +56,7 @@ return {
 			ensure_installed = {
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
-				"isort", -- python formatter
 				"black", -- python formatter
-				"pylint",
 				"eslint",
 				"goimports-reviser",
 				"golines",
